@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const errorMessageEl = document.getElementById('error-message');
     const errorToast = new bootstrap.Toast(errorToastEl);
 
-
     // Show image preview when a file is selected
     imageUpload.addEventListener('change', () => {
         const file = imageUpload.files[0];
@@ -37,37 +36,43 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Prepare UI for loading state
         setLoading(true);
 
-        // Create form data to send
+        // --- Collect selected styles ---
+        const selectedStyles = [];
+        const styleCheckboxes = document.querySelectorAll('input[name="style-modifier"]:checked');
+        styleCheckboxes.forEach(checkbox => {
+            selectedStyles.push(checkbox.value);
+        });
+        
+        // --- Create form data to send ---
         const formData = new FormData();
         formData.append('prompt', promptText);
         formData.append('image', imageFile);
+        
+        // Append each style to the form data
+        selectedStyles.forEach(style => {
+            formData.append('styles', style);
+        });
 
         try {
-            // Make API call
             const response = await fetch('/api/generate', {
                 method: 'POST',
                 body: formData,
             });
 
             if (!response.ok) {
-                // Try to get error message from backend
                 const errorData = await response.json();
                 throw new Error(errorData.detail || `HTTP error! Status: ${response.status}`);
             }
 
-            // Get the image data as a blob
             const imageBlob = await response.blob();
             const imageUrl = URL.createObjectURL(imageBlob);
 
-            // Display the output image
             outputImage.src = imageUrl;
             outputImage.classList.remove('d-none');
             outputPlaceholder.classList.add('d-none');
 
-            // Make download button work
             downloadBtn.href = imageUrl;
             downloadBtn.classList.remove('d-none');
 
@@ -76,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
             showError(error.message);
             resetOutput();
         } finally {
-            // Revert UI from loading state
             setLoading(false);
         }
     });
@@ -85,11 +89,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (isLoading) {
             generateBtn.disabled = true;
             generateBtn.classList.add('loading');
-            spinner.classList.remove('d-none');
         } else {
             generateBtn.disabled = false;
             generateBtn.classList.remove('loading');
-            spinner.classList.add('d-none');
         }
     }
     

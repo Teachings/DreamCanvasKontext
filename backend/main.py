@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend import comfy_processor
 import io
 import os
+from typing import List
 
 app = FastAPI(
     title="Kontext Image Generator API",
@@ -12,48 +13,42 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# --- CORS Middleware ---
-# This allows our frontend (even if served from a different origin) to talk to the backend.
-# In a production Docker setup where both are served from the same origin, this is less critical
-# but good practice for development.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"], # Allows all methods
-    allow_headers=["*"], # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# --- API Endpoint ---
+# --- API Endpoint (Updated) ---
 @app.post("/api/generate")
 async def generate(
     prompt: str = Form(...),
-    image: UploadFile = File(...)
+    image: UploadFile = File(...),
+    styles: List[str] = Form([]) # <-- Accept a list of styles, defaults to empty list
 ):
     """
-    Receives a prompt and an image, processes them using ComfyUI,
+    Receives a prompt, styles, and an image, processes them using ComfyUI,
     and streams the resulting image back.
     """
-    print(f"Received request with prompt: '{prompt}' and image: '{image.filename}'")
+    print(f"Received request with prompt: '{prompt}', styles: {styles}, and image: '{image.filename}'")
 
-    # Ensure the uploaded file is an image
     if not image.content_type.startswith("image/"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="File provided is not an image."
         )
 
-    # Read image bytes
     image_bytes = await image.read()
 
     try:
-        # Call the processing logic
         output_image_bytes = comfy_processor.generate_image(
             prompt_text=prompt,
             input_image_bytes=image_bytes,
-            input_filename=image.filename
+            input_filename=image.filename,
+            styles=styles # Pass the styles to the processor
         )
-        # Stream the image back as the response
         return StreamingResponse(io.BytesIO(output_image_bytes), media_type="image/png")
     
     except FileNotFoundError as e:
@@ -63,9 +58,6 @@ async def generate(
         print(f"An unexpected error occurred: {e}")
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=f"An error occurred during image generation: {e}")
 
-
 # --- Static Files Mount ---
-# This serves the 'frontend' directory at the root URL.
-# The `Directory` check prevents errors if the folder doesn't exist during certain build steps.
 if os.path.isdir('frontend'):
     app.mount("/", StaticFiles(directory="frontend", html=True), name="static")

@@ -21,8 +21,8 @@
         </div>
     </nav>
 
-    <main class="container my-5">
-        <div class="row g-5">
+    <main class="container my-4 my-md-5">
+        <div class="row g-4 g-lg-5">
             <!-- Input Column -->
             <div class="col-lg-6">
                 <div class="card h-100 shadow">
@@ -35,13 +35,69 @@
                                 <input type="file" class="form-control" id="image-upload" accept="image/*" required>
                                 <img id="image-preview" src="#" alt="Image Preview" class="img-fluid rounded mt-3 d-none" />
                             </div>
-
+                            
+                            <!-- Style Modifiers -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Optional Style Modifiers</label>
+                                <div id="style-modifier-group" class="d-flex flex-wrap gap-2">
+                                    <!-- Options will be added dynamically, but here are examples -->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="ghibli" id="style-ghibli" name="style-modifier">
+                                        <label class="form-check-label" for="style-ghibli"><i class="bi bi-wind"></i> Ghibli</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="anime" id="style-anime" name="style-modifier">
+                                        <label class="form-check-label" for="style-anime"><i class="bi bi-stars"></i> Anime</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="cartoonify" id="style-cartoonify" name="style-modifier">
+                                        <label class="form-check-label" for="style-cartoonify"><i class="bi bi-brush"></i> Cartoonify</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="cinematic" id="style-cinematic" name="style-modifier">
+                                        <label class="form-check-label" for="style-cinematic"><i class="bi bi-film"></i> Cinematic</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="pixel_art" id="style-pixel_art" name="style-modifier">
+                                        <label class="form-check-label" for="style-pixel_art"><i class="bi bi-grid-3x3"></i> Pixel Art</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="sticker" id="style-sticker" name="style-modifier">
+                                        <label class="form-check-label" for="style-sticker"><i class="bi bi-sticky"></i> Sticker</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="minecraft" id="style-minecraft" name="style-modifier">
+                                        <label class="form-check-label" for="style-minecraft"><i class="bi bi-box"></i> Minecraft</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="claymation" id="style-claymation" name="style-modifier">
+                                        <label class="form-check-label" for="style-claymation"><i class="bi bi-hand-index-thumb"></i> Claymation</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="3d_render" id="style-3d_render" name="style-modifier">
+                                        <label class="form-check-label" for="style-3d_render"><i class="bi bi-dice-5"></i> 3D Render</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="colorify" id="style-colorify" name="style-modifier">
+                                        <label class="form-check-label" for="style-colorify"><i class="bi bi-palette"></i> Colorify B&W</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="simpsons" id="style-simpsons" name="style-modifier">
+                                        <label class="form-check-label" for="style-simpsons"><i class="bi bi-tv"></i> Simpsons</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="family_guy" id="style-family_guy" name="style-modifier">
+                                        <label class="form-check-label" for="style-family_guy"><i class="bi bi-person-video2"></i> Family Guy</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <!-- Prompt Input -->
                             <div class="mb-4">
-                                <label for="prompt-text" class="form-label fw-semibold">Positive Prompt</label>
-                                <textarea class="form-control" id="prompt-text" rows="4"
-                                    placeholder="e.g., Make this a perfect Ghibli Style photo, enhance details..."
-                                    required>Make this a perfect Ghibli Style photo, remove all watermarks, enhance details.</textarea>
+                                <label for="prompt-text" class="form-label fw-semibold">Describe Your Changes</label>
+                                <textarea class="form-control" id="prompt-text" rows="3"
+                                    placeholder="e.g., make the background a sunny beach, add a pirate hat"
+                                    required>remove watermarks, enhance details</textarea>
                             </div>
 
                             <!-- Generate Button -->
@@ -91,7 +147,6 @@
             </div>
           </div>
         </div>
-
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
