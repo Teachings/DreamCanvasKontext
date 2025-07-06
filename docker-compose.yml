@@ -12,4 +12,6 @@ services:
       # IMPORTANT: Change this to your ComfyUI server's network address
       - COMFYUI_SERVER_ADDRESS=jarvis.mtcl.lan:8188 # Example: use the actual IP of jarvis.mtcl.lan
     # Restart the container automatically if it fails
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
