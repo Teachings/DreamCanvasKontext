@@ -1,0 +1,15 @@
+services:
+  kontext-app:
+    # Build the image from the Dockerfile in the current directory
+    build: .
+    # Name the container for easy reference
+    container_name: kontext_ui_container
+    # Map port 8000 on the host to port 8000 in the container
+    ports:
+      - "8000:8000"
+    # Set environment variables needed by the application
+    environment:
+      # IMPORTANT: Change this to your ComfyUI server's network address
+      - COMFYUI_SERVER_ADDRESS=jarvis.mtcl.lan:8188 # Example: use the actual IP of jarvis.mtcl.lan
+    # Restart the container automatically if it fails
+    restart: unless-stopped
